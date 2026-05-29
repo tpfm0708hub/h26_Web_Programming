@@ -197,23 +197,36 @@ class Game {
         this.playerName = "";
     }
 
-    start() {
-        if (this.isRunning) return;
-
+    getInputName() {
         const name = document.getElementById("playerName").value.trim();
 
         if (name === "") {
             alert("이름을 입력한 뒤 게임을 시작해주세요.");
-            return;
+            return null;
         }
 
-        this.playerName = name;
+        return name;
+    }
+
+    startLoop(message) {
+        clearInterval(this.timer);
+
         this.isRunning = true;
-        UIManager.showMessage(name + "님 게임 진행 중");
+        UIManager.showMessage(message);
 
         this.timer = setInterval(() => {
             this.update();
         }, 30);
+    }
+
+    start() {
+        if (this.isRunning) return;
+
+        const name = this.getInputName();
+        if (name === null) return;
+
+        this.playerName = name;
+        this.startLoop(name + "님 게임 진행 중");
     }
 
     stop() {
@@ -223,9 +236,15 @@ class Game {
     }
 
     restart() {
+        const name = this.getInputName();
+        if (name === null) return;
+
         StorageManager.clear();
+
+        this.playerName = name;
         this.resetGame();
-        UIManager.showMessage("새 게임 시작");
+
+        this.startLoop(name + "님 새 게임을 시작합니다.");
     }
 
     save() {
@@ -240,7 +259,7 @@ class Game {
 
         this.score = sd.score;
         this.level = sd.level;
-        this.playerName = sd.playerName || "";
+        this.playerName = sd.playerName || document.getElementById("playerName").value.trim();
 
         this.player = new Player(sd.playerX, sd.playerY, sd.playerLife);
         this.player.speed = sd.playerSpeed || 20;
@@ -248,10 +267,10 @@ class Game {
 
         this.obstacles = sd.obstacles.map(ob => new Obstacle(ob.x, ob.y, ob.speed));
 
-        this.isRunning = false;
         this.render();
 
-        UIManager.showMessage("저장 지점 불러오기 완료, 시작 버튼을 누르세요.");
+        const displayName = this.playerName || "플레이어";
+        this.startLoop(displayName + "님 저장 지점에서 이어하기를 시작합니다.");
     }
 
     update() {
@@ -299,13 +318,17 @@ class Game {
         clearInterval(this.timer);
         this.isRunning = false;
 
-        RankingManager.saveScore(this.playerName, this.score);
+        const finalScore = this.score;
+        const finalName = this.playerName;
 
-        UIManager.showMessage(
-            "게임 오버! " + this.playerName + "님의 점수 " + this.score + "점이 자동 등록되었습니다."
-        );
+        RankingManager.saveScore(finalName, finalScore);
 
         this.resetGame();
+
+        UIManager.showMessage(
+            "게임 오버! " + finalName + "님의 점수 " + finalScore +
+            "점이 자동 등록되었습니다. 다시 하려면 '처음부터'를 누르세요."
+        );
     }
 
     resetGame() {
