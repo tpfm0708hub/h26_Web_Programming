@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+    <html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <script>
+            let data = 10
+//            data && alert(`data : ${data}`)
+            alert(`data : ${data}`) || data
+//            data || alert(`data : ${data}`)
+
+            let number = 22
+            number = number || 0
+            console.log(`number : ${number}`)
+            document.write('<h1>첫번째</h1>')
+            console.log('나는 남긴다...')
+            var num = 10
+            var num = 20
+            console.log(num, typeof num)
+            // num = 20 짝수다
+            if (num % 2 == 0){
+                msg = '짝수'
+            }
+            console.log('num = ' + num + msg + '다')
+            console.log(`num = ${num} ${msg}다`)
+            console.log(5 == '5')
+            console.log(5 === '5')
+            num = 15
+            msg = '홀수'
+            if (num % 2 == 0){
+                msg = '짝수'
+            }
+            // num = 15 홀수다
+            console.log('num = ' + num + msg + '다')
+        </script>
+    </head>
+    <body>
+        <h2>Hello...</h2>
+        <script>
+            document.write('<h3>세번째</h1>')
+        </script>
+    </body>
+</html>
