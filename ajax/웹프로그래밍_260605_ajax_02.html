@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #responseScope{
+            font-size  : 1.6em;
+            font-weight: bold;
+            padding: 10px;
+
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let responseScope = document.querySelector('#responseScope')
+            let btn = document.querySelector('button')
+            btn.addEventListener('click', async function(){
+                //  비동기 통신 진행
+                try {
+                    let response = await fetch('hello2.html')
+                    console.log(response)
+                    if(response.ok){
+                        let data = await response.text()
+                        responseScope.value += data + '\n'
+                    } else {
+                        throw new Error(`오류발생 : ${response.statusText}(${response.status})`)
+                    }
+                } catch(error) {
+                    responseScope.value += error + '\n'
+                    alert(error)
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+    <button>통신요청</button>
+    <div>
+    <textarea id = "responseScope" rows = "5" cols = "60"></textarea>
+    </div>
+</body>
+</html>
