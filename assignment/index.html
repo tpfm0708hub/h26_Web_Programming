@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOBIS Movie Lounge - 박스오피스 & 영화 후기</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, 'Malgun Gothic', sans-serif;
+            background: #08111f;
+            color: #f5f7fb;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 42px;
+            background: rgba(5, 13, 26, 0.92);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #06101f;
+            background: linear-gradient(135deg, #00e0ff, #03fca5);
+            font-weight: 900;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 18px;
+            color: #bac6d9;
+            font-size: 14px;
+        }
+
+        .hero {
+            min-height: 320px;
+            padding: 60px 42px 48px;
+            background:
+                radial-gradient(circle at 85% 20%, rgba(0, 224, 255, 0.25), transparent 30%),
+                radial-gradient(circle at 8% 95%, rgba(3, 252, 165, 0.18), transparent 35%),
+                linear-gradient(135deg, #0b1729 0%, #111d35 48%, #07101e 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .hero-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: 44px;
+            line-height: 1.2;
+            letter-spacing: -1.4px;
+        }
+
+        .hero p {
+            max-width: 760px;
+            margin: 18px 0 0;
+            color: #c6d3e6;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .search-panel {
+            margin-top: 32px;
+            display: grid;
+            grid-template-columns: 220px 130px 1fr;
+            gap: 12px;
+            max-width: 850px;
+            padding: 16px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        input, select, textarea, button {
+            font-family: inherit;
+        }
+
+        #searchDate, #sortSelect {
+            width: 100%;
+            border: 0;
+            border-radius: 14px;
+            padding: 14px 16px;
+            font-size: 15px;
+            outline: none;
+            color: #102033;
+            background: #ffffff;
+        }
+
+        .primary-btn {
+            border: 0;
+            border-radius: 14px;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #00e0ff, #03fca5);
+            color: #07101e;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(0, 224, 255, 0.22);
+        }
+
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .quick-buttons button, .sub-btn {
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.08);
+            color: #dce7f8;
+            border-radius: 999px;
+            padding: 9px 14px;
+            cursor: pointer;
+        }
+
+        .quick-buttons button:hover, .sub-btn:hover {
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .main-wrap {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 34px 24px 70px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            gap: 24px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .section-title p {
+            margin: 5px 0 0;
+            color: #99a8bd;
+            font-size: 14px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .summary-card {
+            padding: 18px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .summary-card strong {
+            display: block;
+            color: #ffffff;
+            font-size: 22px;
+            margin-top: 8px;
+        }
+
+        .summary-card span {
+            color: #91a1b8;
+            font-size: 13px;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .movie-card {
+            position: relative;
+            display: grid;
+            grid-template-columns: 118px 1fr;
+            min-height: 190px;
+            overflow: hidden;
+            border-radius: 24px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.045));
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
+        }
+
+        .poster {
+            position: relative;
+            padding: 16px 12px;
+            min-height: 190px;
+            background:
+                linear-gradient(155deg, rgba(0, 224, 255, 0.9), rgba(3, 252, 165, 0.65)),
+                linear-gradient(45deg, #25324a, #0a1220);
+            color: #06101f;
+        }
+
+        .rank {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #07101e;
+            color: #03fca5;
+            font-weight: 900;
+            font-size: 20px;
+        }
+
+        .poster-title {
+            position: absolute;
+            left: 12px;
+            right: 12px;
+            bottom: 16px;
+            font-weight: 900;
+            line-height: 1.3;
+            word-break: keep-all;
+        }
+
+        .movie-info {
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .movie-info h3 {
+            margin: 0;
+            font-size: 20px;
+            line-height: 1.35;
+        }
+
+        .badges {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.10);
+            color: #d7e5f7;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            color: #aebbd0;
+            font-size: 13px;
+        }
+
+        .metrics strong {
+            color: #ffffff;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .detail-btn {
+            border: 0;
+            border-radius: 12px;
+            padding: 11px 13px;
+            background: rgba(0, 224, 255, 0.16);
+            color: #bdf7ff;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .review-chip {
+            color: #03fca5;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .side-panel {
+            position: sticky;
+            top: 84px;
+            align-self: start;
+            padding: 20px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+        }
+
+        .side-panel h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        .side-panel p {
+            margin: 0 0 18px;
+            color: #98a8bf;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .review-item {
+            padding: 14px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .review-item:first-child {
+            border-top: 0;
+        }
+
+        .review-item strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+
+        .review-item small {
+            color: #92a3bb;
+        }
+
+        .review-item p {
+            margin: 8px 0 0;
+            color: #d8e2f2;
+        }
+
+        .empty-state, .loading-state, .error-state {
+            padding: 40px 24px;
+            border-radius: 24px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            color: #c7d3e5;
+        }
+
+        .error-state {
+            color: #ffd6d6;
+            border-color: rgba(255, 98, 98, 0.35);
+        }
+
+        .modal-bg {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            padding: 30px 18px;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.72);
+        }
+
+        .modal-bg.show {
+            display: block;
+        }
+
+        .modal-card {
+            width: min(980px, 100%);
+            margin: 20px auto;
+            overflow: hidden;
+            border-radius: 30px;
+            background: #0d1829;
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+        }
+
+        .modal-hero {
+            position: relative;
+            display: grid;
+            grid-template-columns: 170px 1fr;
+            gap: 24px;
+            padding: 34px;
+            background:
+                linear-gradient(90deg, rgba(9, 18, 32, 0.98), rgba(9, 18, 32, 0.76)),
+                radial-gradient(circle at right, rgba(0, 224, 255, 0.35), transparent 50%);
+        }
+
+        .modal-poster {
+            min-height: 250px;
+            border-radius: 20px;
+            padding: 16px;
+            background: linear-gradient(155deg, #00e0ff, #03fca5);
+            color: #06101f;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-poster span {
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            bottom: 18px;
+            font-weight: 900;
+            font-size: 22px;
+            line-height: 1.3;
+        }
+
+        .modal-title h2 {
+            margin: 0;
+            font-size: 34px;
+            letter-spacing: -0.8px;
+        }
+
+        .modal-title .eng-name {
+            margin-top: 6px;
+            color: #9facbf;
+        }
+
+        .score-circle {
+            width: 82px;
+            height: 82px;
+            margin: 20px 0 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border: 8px solid #03fca5;
+            background: #08111f;
+            font-weight: 900;
+        }
+
+        .score-circle small {
+            color: #a7b5c8;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 22px;
+            top: 22px;
+            width: 40px;
+            height: 40px;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 24px;
+            padding: 28px 34px 34px;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .info-table th, .info-table td {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+            padding: 14px 16px;
+            text-align: left;
+            vertical-align: top;
+            font-size: 14px;
+        }
+
+        .info-table th {
+            width: 110px;
+            color: #91a3bc;
+            font-weight: 700;
+        }
+
+        .info-table td {
+            color: #eef5ff;
+            line-height: 1.6;
+        }
+
+        .review-box {
+            padding: 20px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+        }
+
+        .review-box h3 {
+            margin: 0 0 14px;
+        }
+
+        .review-box input, .review-box select, .review-box textarea {
+            width: 100%;
+            border: 0;
+            outline: none;
+            border-radius: 13px;
+            padding: 12px 13px;
+            margin-bottom: 10px;
+            background: #ffffff;
+            color: #102033;
+            font-size: 14px;
+        }
+
+        .review-box textarea {
+            height: 105px;
+            resize: vertical;
+        }
+
+        .modal-review-list {
+            margin-top: 16px;
+            max-height: 310px;
+            overflow: auto;
+            padding-right: 4px;
+        }
+
+        .delete-btn {
+            margin-top: 9px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+            color: #ffd6d6;
+            border-radius: 999px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .footer-note {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 24px 32px;
+            color: #7f8fa7;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 960px) {
+            .top-bar {
+                padding: 14px 22px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .hero {
+                padding: 46px 24px 38px;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            .search-panel, .main-wrap, .modal-body, .modal-hero {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-grid, .movie-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .side-panel {
+                position: static;
+            }
+        }
+    </style>
+    <script>
+        const API_KEY = 'type_your_key';
+        const DAILY_BOX_OFFICE_URL = 'http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json';
+        const MOVIE_INFO_URL = 'http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json';
+
+        let currentMovies = [];
+        let selectedMovie = null;
+        let selectedMovieInfo = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            let searchDate = document.querySelector('#searchDate');
+            let searchBtn = document.querySelector('#searchBtn');
+            let sortSelect = document.querySelector('#sortSelect');
+            let yesterdayBtn = document.querySelector('#yesterdayBtn');
+            let weekBtn = document.querySelector('#weekBtn');
+            let monthBtn = document.querySelector('#monthBtn');
+            let modalCloseBtn = document.querySelector('#modalCloseBtn');
+            let modalBg = document.querySelector('#modalBg');
+            let reviewSaveBtn = document.querySelector('#reviewSaveBtn');
+
+            searchDate.value = getDateStringByGap(1);
+
+            searchBtn.addEventListener('click', function() {
+                searchBoxOffice();
+            });
+
+            searchDate.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    searchBoxOffice();
+                }
+            });
+
+            sortSelect.addEventListener('change', function() {
+                renderMovieList();
+            });
+
+            yesterdayBtn.addEventListener('click', function() {
+                searchDate.value = getDateStringByGap(1);
+                searchBoxOffice();
+            });
+
+            weekBtn.addEventListener('click', function() {
+                searchDate.value = getDateStringByGap(7);
+                searchBoxOffice();
+            });
+
+            monthBtn.addEventListener('click', function() {
+                searchDate.value = getDateStringByGap(30);
+                searchBoxOffice();
+            });
+
+            modalCloseBtn.addEventListener('click', function() {
+                closeModal();
+            });
+
+            modalBg.addEventListener('click', function(event) {
+                if (event.target.id === 'modalBg') {
+                    closeModal();
+                }
+            });
+
+            reviewSaveBtn.addEventListener('click', function() {
+                saveReview();
+            });
+
+            renderRecentReviews();
+            searchBoxOffice();
+        });
+
+        function getDateStringByGap(gap) {
+            let date = new Date();
+            date.setDate(date.getDate() - gap);
+            let year = date.getFullYear();
+            let month = String(date.getMonth() + 1).padStart(2, '0');
+            let day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function convertDateForKobis(dateText) {
+            return dateText.replaceAll('-', '');
+        }
+
+        async function searchBoxOffice() {
+            let searchDate = document.querySelector('#searchDate').value;
+            let movieList = document.querySelector('#movieList');
+            let summaryArea = document.querySelector('#summaryArea');
+            let sectionSubText = document.querySelector('#sectionSubText');
+
+            if (searchDate === '') {
+                alert('조회할 날짜를 선택해주세요.');
+                return;
+            }
+
+            movieList.innerHTML = '<div class="loading-state">박스오피스 정보를 불러오는 중입니다.</div>';
+            summaryArea.innerHTML = '';
+            sectionSubText.textContent = 'KOBIS 일별 박스오피스 API 조회 중';
+
+            try {
+                let response = await getDailyBoxOffice(convertDateForKobis(searchDate));
+
+                if (!response.boxOfficeResult || !response.boxOfficeResult.dailyBoxOfficeList) {
+                    throw new Error('박스오피스 응답 데이터 형식이 올바르지 않습니다.');
+                }
+
+                currentMovies = response.boxOfficeResult.dailyBoxOfficeList;
+                sectionSubText.textContent = `${response.boxOfficeResult.showRange} 기준`;
+                renderSummary();
+                renderMovieList();
+            } catch (error) {
+                movieList.innerHTML = `<div class="error-state">
+                    <h3>조회 중 오류가 발생했습니다.</h3>
+                </div>`;
+            }
+        }
+
+        async function getDailyBoxOffice(targetDt) {
+            let params = new URLSearchParams({
+                key: API_KEY,
+                targetDt: targetDt
+            });
+
+            let url = `${DAILY_BOX_OFFICE_URL}?${params}`;
+            let response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(`박스오피스 API 오류: ${response.status} ${response.statusText}`);
+            }
+
+            return await response.json();
+        }
+
+        async function getMovieInfo(movieCd) {
+            let params = new URLSearchParams({
+                key: API_KEY,
+                movieCd: movieCd
+            });
+
+            let url = `${MOVIE_INFO_URL}?${params}`;
+            let response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(`영화 상세정보 API 오류: ${response.status} ${response.statusText}`);
+            }
+
+            return await response.json();
+        }
+
+        function renderSummary() {
+            let summaryArea = document.querySelector('#summaryArea');
+
+            if (currentMovies.length === 0) {
+                summaryArea.innerHTML = '';
+                return;
+            }
+
+            let totalAudience = 0;
+            let totalSales = 0;
+            let newCount = 0;
+
+            currentMovies.forEach(function(movie) {
+                totalAudience += Number(movie.audiCnt || 0);
+                totalSales += Number(movie.salesAmt || 0);
+                if (movie.rankOldAndNew === 'NEW') {
+                    newCount += 1;
+                }
+            });
+
+            summaryArea.innerHTML = `
+                <div class="summary-card">
+                    <span>TOP 10 일일 관객수</span>
+                    <strong>${formatNumber(totalAudience)}명</strong>
+                </div>
+                <div class="summary-card">
+                    <span>TOP 10 일일 매출액</span>
+                    <strong>${formatNumber(totalSales)}원</strong>
+                </div>
+                <div class="summary-card">
+                    <span>신규 진입 작품</span>
+                    <strong>${newCount}편</strong>
+                </div>
+            `;
+        }
+
+        function renderMovieList() {
+            let movieList = document.querySelector('#movieList');
+            let sortType = document.querySelector('#sortSelect').value;
+            let movies = [...currentMovies];
+
+            if (movies.length === 0) {
+                movieList.innerHTML = '<div class="empty-state">조회된 영화가 없습니다.</div>';
+                return;
+            }
+
+            if (sortType === 'audience') {
+                movies.sort(function(a, b) {
+                    return Number(b.audiCnt || 0) - Number(a.audiCnt || 0);
+                });
+            } else if (sortType === 'sales') {
+                movies.sort(function(a, b) {
+                    return Number(b.salesAmt || 0) - Number(a.salesAmt || 0);
+                });
+            } else {
+                movies.sort(function(a, b) {
+                    return Number(a.rank) - Number(b.rank);
+                });
+            }
+
+            let html = '';
+
+            movies.forEach(function(movie) {
+                let reviewSummary = getReviewSummary(movie.movieCd);
+                let chipText = reviewSummary.count > 0 ? `★ ${reviewSummary.avg} · 후기 ${reviewSummary.count}` : '후기 없음';
+                let newText = movie.rankOldAndNew === 'NEW' ? 'NEW' : '상영중';
+
+                html += `
+                    <article class="movie-card">
+                        <div class="poster">
+                            <div class="rank">${escapeHTML(movie.rank)}</div>
+                            <div class="poster-title">${escapeHTML(movie.movieNm)}</div>
+                        </div>
+                        <div class="movie-info">
+                            <div>
+                                <h3>${escapeHTML(movie.movieNm)}</h3>
+                                <div class="badges">
+                                    <span class="badge">${escapeHTML(newText)}</span>
+                                    <span class="badge">영화코드 ${escapeHTML(movie.movieCd)}</span>
+                                    <span class="badge">전일대비 ${escapeHTML(movie.rankInten)}</span>
+                                </div>
+                            </div>
+                            <div class="metrics">
+                                <div>일일 관객 <strong>${formatNumber(movie.audiCnt)}명</strong></div>
+                                <div>누적 관객 <strong>${formatNumber(movie.audiAcc)}명</strong></div>
+                                <div>일일 매출 <strong>${formatNumber(movie.salesAmt)}원</strong></div>
+                                <div>상영 횟수 <strong>${formatNumber(movie.showCnt)}회</strong></div>
+                            </div>
+                            <div class="card-actions">
+                                <button class="detail-btn" onclick="openMovieDetail('${escapeHTML(movie.movieCd)}')">상세정보 · 후기 보기</button>
+                                <span class="review-chip">${escapeHTML(chipText)}</span>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            });
+
+            movieList.innerHTML = html;
+        }
+
+        async function openMovieDetail(movieCd) {
+            let modalBg = document.querySelector('#modalBg');
+            let modalContent = document.querySelector('#modalContent');
+
+            selectedMovie = findMovieByCode(movieCd);
+            selectedMovieInfo = null;
+
+            modalBg.classList.add('show');
+            modalContent.innerHTML = '<div class="loading-state">영화 상세정보를 불러오는 중입니다.</div>';
+
+            try {
+                let response = await getMovieInfo(movieCd);
+
+                if (!response.movieInfoResult || !response.movieInfoResult.movieInfo) {
+                    throw new Error('영화 상세정보 응답 데이터 형식이 올바르지 않습니다.');
+                }
+
+                selectedMovieInfo = response.movieInfoResult.movieInfo;
+                renderMovieDetail();
+            } catch (error) {
+                modalContent.innerHTML = `<div class="error-state">
+                    <h3>상세정보 조회 중 오류가 발생했습니다.</h3>
+                </div>`;
+            }
+        }
+
+        function renderMovieDetail() {
+            let modalContent = document.querySelector('#modalContent');
+            let movie = selectedMovie;
+            let info = selectedMovieInfo;
+            let reviewSummary = getReviewSummary(info.movieCd);
+            let scoreText = reviewSummary.count > 0 ? reviewSummary.avg : '-';
+
+            let directorText = joinPeople(info.directors, 'peopleNm');
+            let actorText = joinPeople(info.actors ? info.actors.slice(0, 10) : [], 'peopleNm');
+            let genreText = joinPeople(info.genres, 'genreNm');
+            let nationText = joinPeople(info.nations, 'nationNm');
+            let companyText = joinPeople(info.companys, 'companyNm');
+            let auditText = joinPeople(info.audits, 'watchGradeNm');
+            let showTypeText = joinShowTypes(info.showTypes);
+
+            modalContent.innerHTML = `
+                <div class="modal-hero">
+                    <button class="modal-close" id="modalCloseBtn2" title="닫기">×</button>
+                    <div class="modal-poster"><span>${escapeHTML(info.movieNm)}</span></div>
+                    <div class="modal-title">
+                        <h2>${escapeHTML(info.movieNm)} ${info.prdtYear ? `<span style="color:#9facbf; font-size:24px;">(${escapeHTML(info.prdtYear)})</span>` : ''}</h2>
+                        <div class="eng-name">${escapeHTML(info.movieNmEn || '영문 제목 정보 없음')}</div>
+                        <div class="badges">
+                            <span class="badge">개봉일 ${formatOpenDate(info.openDt)}</span>
+                            <span class="badge">${escapeHTML(info.prdtStatNm || '상태 정보 없음')}</span>
+                            <span class="badge">${escapeHTML(info.typeNm || '유형 정보 없음')}</span>
+                            <span class="badge">${escapeHTML(info.showTm || '-')}분</span>
+                        </div>
+                        <div class="score-circle">
+                            <span>${escapeHTML(scoreText)}</span>
+                            <small>USER SCORE</small>
+                        </div>
+                        <p style="max-width:680px; color:#c6d3e6; line-height:1.7;">KOBIS 영화 상세정보와 사용자가 직접 남긴 로컬 후기를 함께 확인할 수 있습니다. 영화 포스터·시놉시스는 KOBIS 응답 상황에 따라 제공되지 않을 수 있어, 본 예제에서는 카드형 포스터 영역을 자체 디자인으로 처리했습니다.</p>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <table class="info-table">
+                            <tr><th>박스오피스</th><td>${movie ? `${escapeHTML(movie.rank)}위 · 일일 관객 ${formatNumber(movie.audiCnt)}명 · 누적 관객 ${formatNumber(movie.audiAcc)}명` : '박스오피스 정보 없음'}</td></tr>
+                            <tr><th>영화코드</th><td>${escapeHTML(info.movieCd || '-')}</td></tr>
+                            <tr><th>감독</th><td>${escapeHTML(directorText)}</td></tr>
+                            <tr><th>배우</th><td>${escapeHTML(actorText)}</td></tr>
+                            <tr><th>장르</th><td>${escapeHTML(genreText)}</td></tr>
+                            <tr><th>국가</th><td>${escapeHTML(nationText)}</td></tr>
+                            <tr><th>관람등급</th><td>${escapeHTML(auditText)}</td></tr>
+                            <tr><th>상영형태</th><td>${escapeHTML(showTypeText)}</td></tr>
+                            <tr><th>제작/배급</th><td>${escapeHTML(companyText)}</td></tr>
+                        </table>
+                    </div>
+                    <div class="review-box">
+                        <h3>영화 후기 작성</h3>
+                        <input type="text" id="reviewName" placeholder="작성자 이름 또는 닉네임">
+                        <select id="reviewScore">
+                            <option value="5">★★★★★ 5점</option>
+                            <option value="4">★★★★☆ 4점</option>
+                            <option value="3">★★★☆☆ 3점</option>
+                            <option value="2">★★☆☆☆ 2점</option>
+                            <option value="1">★☆☆☆☆ 1점</option>
+                        </select>
+                        <textarea id="reviewText" placeholder="이 영화에 대한 후기를 작성해주세요."></textarea>
+                        <button class="primary-btn" id="reviewSaveBtn2" style="width:100%;">후기 저장</button>
+                        <div class="modal-review-list" id="modalReviewList"></div>
+                    </div>
+                </div>
+            `;
+
+            document.querySelector('#modalCloseBtn2').addEventListener('click', function() {
+                closeModal();
+            });
+
+            document.querySelector('#reviewSaveBtn2').addEventListener('click', function() {
+                saveReview();
+            });
+
+            renderModalReviews();
+        }
+
+        function closeModal() {
+            document.querySelector('#modalBg').classList.remove('show');
+        }
+
+        function saveReview() {
+            if (!selectedMovieInfo || !selectedMovieInfo.movieCd) {
+                alert('영화 상세정보를 먼저 선택해주세요.');
+                return;
+            }
+
+            let nameInput = document.querySelector('#reviewName');
+            let scoreInput = document.querySelector('#reviewScore');
+            let textInput = document.querySelector('#reviewText');
+
+            if (!nameInput || !scoreInput || !textInput) {
+                return;
+            }
+
+            let name = nameInput.value.trim();
+            let score = scoreInput.value;
+            let text = textInput.value.trim();
+
+            if (name === '') {
+                alert('작성자 이름 또는 닉네임을 입력해주세요.');
+                nameInput.focus();
+                return;
+            }
+
+            if (text === '') {
+                alert('후기 내용을 입력해주세요.');
+                textInput.focus();
+                return;
+            }
+
+            let reviews = getReviews(selectedMovieInfo.movieCd);
+            reviews.unshift({
+                id: new Date().getTime(),
+                movieCd: selectedMovieInfo.movieCd,
+                movieNm: selectedMovieInfo.movieNm,
+                name: name,
+                score: Number(score),
+                text: text,
+                createdAt: getNowText()
+            });
+
+            localStorage.setItem(getReviewKey(selectedMovieInfo.movieCd), JSON.stringify(reviews));
+
+            nameInput.value = '';
+            scoreInput.value = '5';
+            textInput.value = '';
+
+            renderModalReviews();
+            renderRecentReviews();
+            renderMovieList();
+        }
+
+        function deleteReview(movieCd, reviewId) {
+            let reviews = getReviews(movieCd);
+            let nextReviews = reviews.filter(function(review) {
+                return String(review.id) !== String(reviewId);
+            });
+            localStorage.setItem(getReviewKey(movieCd), JSON.stringify(nextReviews));
+            renderModalReviews();
+            renderRecentReviews();
+            renderMovieList();
+        }
+
+        function renderModalReviews() {
+            let modalReviewList = document.querySelector('#modalReviewList');
+
+            if (!modalReviewList || !selectedMovieInfo) {
+                return;
+            }
+
+            let reviews = getReviews(selectedMovieInfo.movieCd);
+
+            if (reviews.length === 0) {
+                modalReviewList.innerHTML = '<div class="empty-state" style="padding:20px 12px;">아직 작성된 후기가 없습니다.</div>';
+                return;
+            }
+
+            let html = '';
+            reviews.forEach(function(review) {
+                html += `
+                    <div class="review-item">
+                        <strong>${escapeHTML(review.name)} · ${makeStarText(review.score)}</strong>
+                        <small>${escapeHTML(review.createdAt)}</small>
+                        <button class="delete-btn" onclick="deleteReview('${escapeHTML(selectedMovieInfo.movieCd)}', '${escapeHTML(review.id)}')">후기 삭제</button>
+                    </div>
+                `;
+            });
+
+            modalReviewList.innerHTML = html;
+        }
+
+        function renderRecentReviews() {
+            let recentReviewList = document.querySelector('#recentReviewList');
+            let allReviews = [];
+
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                if (key.indexOf('kobisReview_') === 0) {
+                    let reviews = JSON.parse(localStorage.getItem(key) || '[]');
+                    reviews.forEach(function(review) {
+                        allReviews.push(review);
+                    });
+                }
+            }
+
+            allReviews.sort(function(a, b) {
+                return Number(b.id) - Number(a.id);
+            });
+
+            if (allReviews.length === 0) {
+                recentReviewList.innerHTML = '<div class="empty-state" style="padding:20px 12px;">아직 저장된 후기가 없습니다.<br>영화 상세정보에서 첫 후기를 남겨보세요.</div>';
+                return;
+            }
+
+            let html = '';
+            allReviews.slice(0, 6).forEach(function(review) {
+                html += `
+                    <div class="review-item">
+                        <strong>${escapeHTML(review.movieNm)}</strong>
+                        <small>${escapeHTML(review.name)} · ${makeStarText(review.score)} · ${escapeHTML(review.createdAt)}</small>
+                    </div>
+                `;
+            });
+
+            recentReviewList.innerHTML = html;
+        }
+
+        function findMovieByCode(movieCd) {
+            for (let i = 0; i < currentMovies.length; i++) {
+                if (currentMovies[i].movieCd === movieCd) {
+                    return currentMovies[i];
+                }
+            }
+            return null;
+        }
+
+        function getReviewKey(movieCd) {
+            return `kobisReview_${movieCd}`;
+        }
+
+        function getReviews(movieCd) {
+            return JSON.parse(localStorage.getItem(getReviewKey(movieCd)) || '[]');
+        }
+
+        function getReviewSummary(movieCd) {
+            let reviews = getReviews(movieCd);
+
+            if (reviews.length === 0) {
+                return { count: 0, avg: '-' };
+            }
+
+            let sum = 0;
+            reviews.forEach(function(review) {
+                sum += Number(review.score || 0);
+            });
+
+            return {
+                count: reviews.length,
+                avg: (sum / reviews.length).toFixed(1)
+            };
+        }
+
+        function joinPeople(list, key) {
+            if (!list || list.length === 0) {
+                return '정보 없음';
+            }
+
+            let names = [];
+            list.forEach(function(item) {
+                if (item[key]) {
+                    names.push(item[key]);
+                }
+            });
+
+            return names.length > 0 ? names.join(', ') : '정보 없음';
+        }
+
+        function joinShowTypes(list) {
+            if (!list || list.length === 0) {
+                return '정보 없음';
+            }
+
+            let names = [];
+            list.forEach(function(item) {
+                let groupName = item.showTypeGroupNm || '';
+                let typeName = item.showTypeNm || '';
+                names.push(`${groupName} ${typeName}`.trim());
+            });
+
+            return names.join(', ');
+        }
+
+        function makeStarText(score) {
+            let result = '';
+            for (let i = 1; i <= 5; i++) {
+                result += i <= Number(score) ? '★' : '☆';
+            }
+            return result;
+        }
+
+        function formatNumber(value) {
+            return Number(value || 0).toLocaleString('ko-KR');
+        }
+
+        function formatOpenDate(openDt) {
+            if (!openDt || openDt.length !== 8) {
+                return '정보 없음';
+            }
+
+            return `${openDt.substring(0, 4)}.${openDt.substring(4, 6)}.${openDt.substring(6, 8)}`;
+        }
+
+        function getNowText() {
+            let now = new Date();
+            let year = now.getFullYear();
+            let month = String(now.getMonth() + 1).padStart(2, '0');
+            let day = String(now.getDate()).padStart(2, '0');
+            let hour = String(now.getHours()).padStart(2, '0');
+            let minute = String(now.getMinutes()).padStart(2, '0');
+            return `${year}.${month}.${day} ${hour}:${minute}`;
+        }
+
+        function escapeHTML(value) {
+            return String(value || '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
+        }
+    </script>
+</head>
+<body>
+    <header class="top-bar">
+        <div class="brand">
+            <div class="brand-mark">K</div>
+            <div>
+                <div>KOBIS Movie Lounge</div>
+                <small style="color:#8fa0b9; font-weight:500;">Box Office · Detail · Review</small>
+            </div>
+        </div>
+        <nav class="nav-menu">
+            <a href="#boxOfficeSection">박스오피스</a>
+            <a href="#recentReviewList">최근 후기</a>
+            <a href="http://www.kobis.or.kr/kobisopenapi/homepg/main/main.do" target="_blank">KOBIS API</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-inner">
+            <h1>오늘의 박스오피스와<br>나만의 영화 후기를 한 화면에서 확인하세요.</h1>
+            <div class="search-panel">
+                <input type="date" id="searchDate" title="조회 날짜">
+                <select id="sortSelect" title="정렬 기준">
+                    <option value="rank">순위순</option>
+                    <option value="audience">관객수순</option>
+                    <option value="sales">매출액순</option>
+                </select>
+                <button class="primary-btn" id="searchBtn">박스오피스 조회</button>
+            </div>
+            <div class="quick-buttons">
+                <button id="yesterdayBtn">어제 기준</button>
+                <button id="weekBtn">7일 전</button>
+                <button id="monthBtn">30일 전</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-wrap">
+        <section id="boxOfficeSection">
+            <div class="section-title">
+                <div>
+                    <h2>일별 박스오피스 TOP 10</h2>
+                    <p id="sectionSubText">조회 전</p>
+                </div>
+            </div>
+            <div class="summary-grid" id="summaryArea"></div>
+            <div class="movie-grid" id="movieList">
+                <div class="empty-state">조회 버튼을 눌러 박스오피스를 확인해주세요.</div>
+            </div>
+        </section>
+
+        <aside class="side-panel">
+            <h3>최근 등록 후기</h3>
+            <div id="recentReviewList"></div>
+        </aside>
+    </main>
+
+    <div class="modal-bg" id="modalBg">
+        <div class="modal-card">
+            <button class="modal-close" id="modalCloseBtn" title="닫기">×</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <footer class="footer-note">
+        ※ 본 페이지는 웹프로그래밍 AJAX 학습용 예제입니다. 영화 순위와 상세정보는 KOBIS Open API 응답을 기반으로 표시하며, 후기 데이터는 사용자 브라우저에만 저장됩니다. KOBIS API 호출 주소가 HTTP이므로, HTTPS 환경에서는 브라우저의 혼합 콘텐츠 정책에 의해 차단될 수 있습니다.
+    </footer>
+</body>
+</html>
