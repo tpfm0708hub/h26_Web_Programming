@@ -1,0 +1,51 @@
+/* 완료된 항목 스타일 */
+.complete h4 {
+    text-decoration: line-through;
+    color: gray;
+}
+
+/* -------------------------------------
+   고급 Todo List 커스텀 스타일
+------------------------------------- */
+
+/* 할 일 항목 전체 박스 디자인 */
+.todo-item {
+    background-color: #f2f2f2; /* 이미지와 유사한 밝은 회색 배경 */
+    border-radius: 8px;        /* 모서리 둥글게 */
+    padding: 20px;
+    margin-bottom: 20px;
+    list-style-type: none;     /* 리스트 점(bullet) 제거 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* 중요도별 좌측 테두리 포인트 컬러 */
+.priority-high {
+    border-left: 10px solid #dc3545; /* 빨간색 (높음) */
+}
+.priority-medium {
+    border-left: 10px solid #fd7e14; /* 주황색 (중간) */
+}
+.priority-low {
+    border-left: 10px solid #198754; /* 초록색 (낮음) */
+}
+
+/* 할 일 내용 (카테고리, 중요도, 마감일) 간격 조정 */
+.todo-info p {
+    margin: 5px 0; /* 문단 위아래 여백을 줄여서 밀착 */
+    font-size: 0.95rem;
+}
+
+/* 하단 영역 (등록일자 및 버튼 그룹) */
+.todo-footer {
+    display: flex;
+    justify-content: space-between; /* 양쪽 끝으로 배치 */
+    align-items: center;            /* 세로 중앙 정렬 */
+    margin-top: 15px;
+}
+
+/* 등록일자 텍스트 스타일 */
+.reg-date {
+    font-size: 0.85rem;
+    color: #666;
+}
